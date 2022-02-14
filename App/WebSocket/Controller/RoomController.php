@@ -4,6 +4,8 @@ namespace App\WebSocket\Controller;
 use App\Model\RoomModel;
 use App\Model\UserModel;
 use App\Service\DisConstant;
+use App\Service\PubSub;
+use EasySwoole\Log\Logger;
 
 class RoomController extends BaseController {
 
@@ -105,6 +107,22 @@ class RoomController extends BaseController {
         $result = $this->roomModel->getRoomMusicList($roomId);
         $result['action'] = 'getRoomMusicList';
         $this->response()->setMessage(json_encode($result));
+    }
+
+    /**
+     * 播放/暂停
+     */
+    public function changePlayType()
+    {
+        try {
+            $roomId = $this->getArgument('roomid', 0);//通知房间所有在线用户切换歌曲
+            $action = $this->getArgument('action');
+            $result = $this->roomModel->changePlayType($roomId, $action);
+            $result['action'] = $action;
+            $this->response()->setMessage(json_encode($result));
+        } catch (\Exception $exception) {
+            \EasySwoole\EasySwoole\Logger::getInstance()->log('更改播放状态失败' . $exception->getMessage(), Logger::LOG_LEVEL_ERROR, 'ROOM');
+        }
     }
 
     /**

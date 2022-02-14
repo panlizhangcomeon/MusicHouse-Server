@@ -1,9 +1,11 @@
 <?php
 namespace App\Model;
 
+use App\Service\FdManager;
 use App\Service\JwtAuth;
 use EasySwoole\Component\TableManager;
 use EasySwoole\EasySwoole\Logger;
+use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\Redis\Redis as RedisClient;
 use EasySwoole\RedisPool\Redis;
 

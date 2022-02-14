@@ -4,6 +4,7 @@ namespace App\WebSocket;
 use App\Model\RoomModel;
 use App\Model\UserModel;
 use EasySwoole\Component\TableManager;
+use Swoole\Server;
 
 /**
  * Class WebSocketEvent
@@ -134,5 +135,10 @@ class WebSocketEvent
                 echo "server close \n";
             }
         }
+    }
+
+    public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request)
+    {
+
     }
 }

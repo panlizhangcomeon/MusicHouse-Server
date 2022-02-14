@@ -218,7 +218,32 @@ class RoomModel extends BaseModel {
             $hashKey = $type == DisConstant::PLAY_RAND ? array_rand($musicHashArr) : $flag;
             $hashValue = $musicHashArr[$hashKey];
             $result['hash'] = $hashValue;
+
+            //通知房间所有在线用户切换歌曲
+            PubSub::getInstance()->publish('room', [
+                'action' => 'getNextMusic',
+                'roomid' => $roomId,
+                'status' => 0,
+                'hash' => $hashValue
+            ]);
         }
+        return $result;
+    }
+
+    /**
+     * 播放音乐
+     * @param int $roomId
+     * @param string $action
+     * @return array
+     */
+    public function changePlayType(int $roomId, string $action)
+    {
+        $result = ['status' => 0, 'errorMsg' => ''];
+        PubSub::getInstance()->publish('room', [
+            'action' => $action,
+            'roomid' => $roomId,
+            'status' => 0,
+        ]);
         return $result;
     }
 
@@ -255,6 +280,14 @@ class RoomModel extends BaseModel {
             $hashKey = $type == DisConstant::PLAY_RAND ? array_rand($musicHashArr) : $flag;
             $hashValue = $musicHashArr[$hashKey];
             $result['hash'] = $hashValue;
+
+            //通知房间所有在线用户切换歌曲
+            PubSub::getInstance()->publish('room', [
+                'action' => 'getPrevMusic',
+                'roomid' => $roomId,
+                'status' => 0,
+                'hash' => $hashValue
+            ]);
         }
         return $result;
     }

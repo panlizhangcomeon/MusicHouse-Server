@@ -43,10 +43,10 @@ return [
         'timeout' => 120
     ],
     'mysqli' => [
-        'host'          => '192.168.10.18',
-        'port'          => 3306,
+        'host'          => '172.17.20.88',
+        'port'          => 3307,
         'user'          => 'root',
-        'password'      => '12345678',
+        'password'      => 'root',
         'database'      => 'music',
         'timeout'       => 5,
         'charset'       => 'utf8mb4',
@@ -56,9 +56,9 @@ return [
         'expire' => 7200,
     ],
     'redis' => [
-        'host' => '192.168.10.18',
-        'port' => 6379,
-        'auth' => '123456',
+        'host' => '172.17.20.88',
+        'port' => 6390,
+        'auth' => '',
         'db' => 0,
         'timeout' => 10,
     ],

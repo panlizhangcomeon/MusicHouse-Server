@@ -28,9 +28,15 @@ class NoticeProcess extends AbstractProcess {
                     case 'otherDelMusic':
                     case 'otherAddComment':
                     case 'otherDelComment':
+                    case 'getNextMusic':
+                    case 'getPrevMusic':
+                    case 'pauseMusic':
+                    case 'playMusic':
                         $this->notifyClient($data);
+                        break;
                     case 'updateToken':
                         $this->notifyFd($data);
+                        break;
                 }
             });
         });
