@@ -464,4 +464,20 @@ class RoomModel extends BaseModel {
         });
         return array_keys($userList);
     }
+
+    /**
+     * 选中音乐后通知房间其他人播放
+     * @param int $roomId
+     * @param string $hash
+     * @param int $albumId
+     */
+    public function chooseMusic(int $roomId, string $hash, int $albumId)
+    {
+        PubSub::getInstance()->publish('room', [
+            'action' => 'getNextMusic',
+            'roomid' => $roomId,
+            'hash' => $hash,
+            'album_id' => $albumId
+        ]);
+    }
 }

@@ -210,4 +210,21 @@ class RoomController extends BaseController {
         $result['action'] = 'addComment';
         $this->response()->setMessage(json_encode($result));
     }
+
+    /**
+     * 点击播放音乐
+     */
+    public function chooseMusic()
+    {
+        try {
+            $roomId = $this->getArgument('roomid', 0);
+            $hash = $this->getArgument('hash', '');
+            $albumId = $this->getArgument('album_id', 0);
+            $result = $this->roomModel->chooseMusic($roomId, $hash, $albumId);
+            $result['action'] = 'chooseMusic';
+            $this->response()->setMessage(json_encode($result));
+        } catch (\Exception $exception) {
+            \EasySwoole\EasySwoole\Logger::getInstance()->log('播放音乐失败' . $exception->getMessage(), Logger::LOG_LEVEL_ERROR, 'ROOM');
+        }
+    }
 }
