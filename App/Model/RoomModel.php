@@ -194,11 +194,13 @@ class RoomModel extends BaseModel {
      */
     public function getNextMusic($roomId, $playingHash, $type) {
         $result = ['status' => 0, 'errorMsg' => '', 'src' => ''];
-        $data = $this->raw("select hash from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
+        $data = $this->raw("select hash,album_id from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
         if (!empty($data)) {
-            $musicHashArr = array_column($data, 'hash');
-            foreach ($musicHashArr as $k => $hash) {
-                if ($hash == $playingHash) {
+            $musicHashArr = $data;
+            //$musicHashArr = array_column($data, 'hash');
+            $flag = 0;
+            foreach ($musicHashArr as $k => $item) {
+                if ($item['hash'] == $playingHash) {
                     if ($type == DisConstant::PLAY_RAND) {
                         //随机播放
                         unset($musicHashArr[$k]);
@@ -216,15 +218,18 @@ class RoomModel extends BaseModel {
                 }
             }
             $hashKey = $type == DisConstant::PLAY_RAND ? array_rand($musicHashArr) : $flag;
-            $hashValue = $musicHashArr[$hashKey];
+            $hashValue = $musicHashArr[$hashKey]['hash'];
+            $albumId = $musicHashArr[$hashKey]['album_id'];
             $result['hash'] = $hashValue;
+            $result['album_id'] = $albumId;
 
             //通知房间所有在线用户切换歌曲
             PubSub::getInstance()->publish('room', [
                 'action' => 'getNextMusic',
                 'roomid' => $roomId,
                 'status' => 0,
-                'hash' => $hashValue
+                'hash' => $hashValue,
+                'album_id' => $albumId
             ]);
         }
         return $result;
@@ -256,11 +261,13 @@ class RoomModel extends BaseModel {
      */
     public function getPrevMusic($roomId, $playingHash, $type) {
         $result = ['status' => 0, 'errorMsg' => '', 'src' => ''];
-        $data = $this->raw("select hash from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
+        $data = $this->raw("select hash,album_id from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
         if (!empty($data)) {
-            $musicHashArr = array_column($data, 'hash');
-            foreach ($musicHashArr as $k => $hash) {
-                if ($hash == $playingHash) {
+            //$musicHashArr = array_column($data, 'hash');
+            $musicHashArr = $data;
+            $flag = 0;
+            foreach ($musicHashArr as $k => $item) {
+                if ($item['hash'] == $playingHash) {
                     if ($type == DisConstant::PLAY_RAND) {
                         //随机播放
                         unset($musicHashArr[$k]);
@@ -278,15 +285,18 @@ class RoomModel extends BaseModel {
                 }
             }
             $hashKey = $type == DisConstant::PLAY_RAND ? array_rand($musicHashArr) : $flag;
-            $hashValue = $musicHashArr[$hashKey];
+            $hashValue = $musicHashArr[$hashKey]['hash'];
+            $albumId = $musicHashArr[$hashKey]['album_id'];
             $result['hash'] = $hashValue;
+            $result['album_id'] = $albumId;
 
             //通知房间所有在线用户切换歌曲
             PubSub::getInstance()->publish('room', [
                 'action' => 'getPrevMusic',
                 'roomid' => $roomId,
                 'status' => 0,
-                'hash' => $hashValue
+                'hash' => $hashValue,
+                'album_id' => $albumId
             ]);
         }
         return $result;
@@ -300,9 +310,10 @@ class RoomModel extends BaseModel {
      * @param $album
      * @param $hash
      * @param $username
+     * @param int $albumId
      * @return array
      */
-    public function addRoomMusicList($roomId, $songName, $singerName, $album, $hash, $username) {
+    public function addRoomMusicList($roomId, $songName, $singerName, $album, $hash, $username, int $albumId) {
         $returnResult = ['status' => 0, 'errorMsg' => '插入成功'];
         $time = time();
         $params = [
@@ -311,6 +322,7 @@ class RoomModel extends BaseModel {
             'singerName' => $singerName,
             'album' => $album,
             'hash' => $hash,
+            'album_id' => $albumId,
             'create_time' => $time,
             'update_time' => $time
         ];

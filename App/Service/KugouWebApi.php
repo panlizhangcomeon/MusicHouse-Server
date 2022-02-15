@@ -24,15 +24,17 @@ class KugouWebApi {
 
     /**
      * 获取音乐详情(带歌词)
-     * @param $hash
+     * @param string $hash
+     * @param int $albumId
      * @param string $r
      * @return array
      */
-    public function getMusic($hash, $r = 'play/getdata') {
+    public function getMusic(string $hash, int $albumId, string $r = 'play/getdata') {
         $result = ['status' => -1, 'errorMsg' => '获取失败'];
         $getParams = [
             'r' => $r,
             'hash' => $hash,
+            'album_id' => $albumId,
         ];
         $path = 'yy/index.php';
         $header = ['cookie' => 'kg_mid=' . time()];

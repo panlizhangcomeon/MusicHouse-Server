@@ -19,7 +19,8 @@ class Music extends BaseController {
      */
     public function getMusic() {
         $hash = $this->input('hash');
-        $musicInfo = KugouWebApi::getInstance()->getMusic($hash);
+        $albumId = $this->input('album_id', 0);
+        $musicInfo = KugouWebApi::getInstance()->getMusic($hash, $albumId);
         $this->writeJson(200, $musicInfo, 'success');
     }
 }

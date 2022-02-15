@@ -50,7 +50,8 @@ class KugouMobileApi {
                         'singername' => $item['singername'],
                         'hash' => $item['hash'],
                         'duration' => getFormatDuration($item['duration']),
-                        'album_name' => empty($item['album_name']) ? '' : '《' . $item['album_name'] . '》'
+                        'album_name' => empty($item['album_name']) ? '' : '《' . $item['album_name'] . '》',
+                        'album_id' => $item['album_id'] ?? 0
                     ];
                 }
             }

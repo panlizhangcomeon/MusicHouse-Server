@@ -4,7 +4,6 @@ namespace App\WebSocket\Controller;
 use App\Model\RoomModel;
 use App\Model\UserModel;
 use App\Service\DisConstant;
-use App\Service\PubSub;
 use EasySwoole\Log\Logger;
 
 class RoomController extends BaseController {
@@ -56,7 +55,7 @@ class RoomController extends BaseController {
     }
 
     /**
-     * 添加房间
+     * 刪除房间
      */
     public function delRoom() {
         $roomid = $this->getArgument('roomid', 0);
@@ -159,7 +158,8 @@ class RoomController extends BaseController {
         $singerName = $this->getArgument('singername', '');
         $album = $this->getArgument('album', '');
         $hash = $this->getArgument('hash', '');
-        $result = $this->roomModel->addRoomMusicList($roomId, $songName, $singerName, $album, $hash, $username);
+        $albumId = $this->getArgument('album_id', 0);
+        $result = $this->roomModel->addRoomMusicList($roomId, $songName, $singerName, $album, $hash, $username, $albumId);
         $result['action'] = 'addRoomMusicList';
         $this->response()->setMessage(json_encode($result));
     }
