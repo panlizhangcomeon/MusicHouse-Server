@@ -493,6 +493,7 @@ class RoomModel extends BaseModel
     public function chooseMusic(int $roomId, string $hash, int $albumId)
     {
         PubSub::getInstance()->publish('room', [
+            'status' => 0,
             'action' => 'getNextMusic',
             'roomid' => $roomId,
             'hash' => $hash,
