@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Service\FdManager;
@@ -9,8 +10,8 @@ use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\Redis\Redis as RedisClient;
 use EasySwoole\RedisPool\Redis;
 
-class UserModel extends BaseModel {
-
+class UserModel extends BaseModel
+{
     private $userTable = 'user';
 
     /**
@@ -20,7 +21,8 @@ class UserModel extends BaseModel {
      * @return array
      * @throws \Exception
      */
-    public function login(string $username, string $password):array {
+    public function login(string $username, string $password): array
+    {
         $returnResult = ['status' => 0, 'errorMsg' => ''];
         $result = $this->raw("select * from $this->userTable where username = ? and password = ?", [$username, $password]);
         if (empty($result[0])) {
@@ -47,7 +49,8 @@ class UserModel extends BaseModel {
      * @param string $avatar
      * @return array
      */
-    public function register(string $username, string $password, string $area, string $birthday, string $likeType, int $sex, string $desc = '', string $avatar = '') {
+    public function register(string $username, string $password, string $area, string $birthday, string $likeType, int $sex, string $desc = '', string $avatar = '')
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '注册成功'];
         $time = time();
         $params = [
@@ -80,7 +83,8 @@ class UserModel extends BaseModel {
      * @return array
      * @throws \Exception
      */
-    public function changePassword(string $username, string $oldPassword, string $newPassword):array {
+    public function changePassword(string $username, string $oldPassword, string $newPassword): array
+    {
         $returnResult = ['status' => -1, 'errorMsg' => '修改失败'];
         $oldInfo = $this->raw("select password from $this->userTable where username = ?", [$username]);
         $password = $oldInfo[0]['password'];
@@ -102,7 +106,8 @@ class UserModel extends BaseModel {
      * @param string $token
      * @return array
      */
-    public function getUserInfo(string $token):array {
+    public function getUserInfo(string $token): array
+    {
         $result = [];
         try {
             $result = JwtAuth::getInstance()->decode($token);
@@ -121,7 +126,8 @@ class UserModel extends BaseModel {
      * @param string $username
      * @return array
      */
-    public function getUserInfoByUsername(string $username):array {
+    public function getUserInfoByUsername(string $username): array
+    {
         $result = [];
         $data = $this->raw("select * from $this->userTable where username = ?", [$username]);
         if (empty($data[0])) {
@@ -143,7 +149,8 @@ class UserModel extends BaseModel {
      * @return array
      * @throws \Exception
      */
-    public function changeUserInfo($username, $avatar, $desc) {
+    public function changeUserInfo($username, $avatar, $desc)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '修改成功'];
         $sql = "update $this->userTable set `desc` = ? ";
         $params = [$desc];
@@ -167,7 +174,8 @@ class UserModel extends BaseModel {
      * @param $username
      * @return array
      */
-    public function getAvatarByUsername($username) {
+    public function getAvatarByUsername($username)
+    {
         $data = $this->raw("select avatar from $this->userTable where username = ?", [$username]);
         return $data[0]['avatar'] ?? [];
     }
@@ -178,7 +186,8 @@ class UserModel extends BaseModel {
      * @return bool|string
      * @throws \Exception
      */
-    public function refreshToken(string $username) {
+    public function refreshToken(string $username)
+    {
         $result = $this->raw("select * from $this->userTable where username = ?", [$username]);
         if (empty($result[0])) {
             return false;
@@ -195,7 +204,8 @@ class UserModel extends BaseModel {
      * @param $fd
      * @return mixed|null
      */
-    public function refreshUserFd($username, $fd) {
+    public function refreshUserFd($username, $fd)
+    {
         return Redis::invoke('music', function (RedisClient $client) use ($username, $fd) {
             $fdKey = 'USER:' . $username;
             setExpire($client, $fdKey);

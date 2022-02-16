@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use EasySwoole\EasySwoole\Config;
@@ -6,10 +7,12 @@ use EasySwoole\EasySwoole\Logger;
 use EasySwoole\Mysqli\Client;
 use EasySwoole\Mysqli\Config as MysqliConfig;
 
-class BaseModel {
+class BaseModel
+{
     protected $mysql;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->mysql = new Client(new MysqliConfig(Config::getInstance()->getConf('mysqli')));
     }
 
@@ -19,7 +22,8 @@ class BaseModel {
      * @param array $param
      * @return array|bool|null
      */
-    public function raw(string $sql, array $param) {
+    public function raw(string $sql, array $param)
+    {
         $this->mysql->queryBuilder()->raw($sql, $param);
         try {
             return $this->mysql->execBuilder();
@@ -34,7 +38,8 @@ class BaseModel {
      * @param string $tableName
      * @return array|bool|null
      */
-    public function getAll(string $tableName) {
+    public function getAll(string $tableName)
+    {
         $this->mysql->queryBuilder()->get($tableName);
         try {
             return $this->mysql->execBuilder();
@@ -50,7 +55,8 @@ class BaseModel {
      * @param array $insertData
      * @return bool
      */
-    public function insert(string $tableName, array $insertData):bool {
+    public function insert(string $tableName, array $insertData): bool
+    {
         $this->mysql->queryBuilder()->insert($tableName, $insertData);
         try {
             return $this->mysql->execBuilder();

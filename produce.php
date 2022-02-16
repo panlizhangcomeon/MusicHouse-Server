@@ -1,4 +1,5 @@
 <?php
+
 return [
     'SERVER_NAME' => "EasySwoole",
     'MAIN_SERVER' => [

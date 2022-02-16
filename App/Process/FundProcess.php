@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Process;
 
 use EasySwoole\Component\Process\AbstractProcess;
@@ -11,8 +12,8 @@ use EasySwoole\Utility\ArrayToTextTable;
  * Class FundProcess
  * @package App\Process
  */
-class FundProcess extends AbstractProcess {
-
+class FundProcess extends AbstractProcess
+{
     protected $fundCodeArr = [
         '003634', '002542', '005918', '161726', '001302', '001740', '003096', '005609', '000311',
         '004744', '161028', '001071', '004857', '163406', '001511', '398061', '161725', '320007'
@@ -33,7 +34,8 @@ class FundProcess extends AbstractProcess {
     /**
      * 获取基金对应估值并排序，格式化输出
      */
-    function getFundData() {
+    public function getFundData()
+    {
         $startTime = microtime(true);
 
         $unixTimeStamp = $this->getUnixTimeStamp();
@@ -44,7 +46,7 @@ class FundProcess extends AbstractProcess {
             if (isset($this->apiResult[$fundCode]['gszzl'])) {
                 if ($data['gszzl'] > $this->apiResult[$fundCode]['gszzl']) {
                     $status = "\e[31m" . str_pad('↑', 10, ' ') . "\e[0m";
-                } else if ($data['gszzl'] < $this->apiResult[$fundCode]['gszzl']) {
+                } elseif ($data['gszzl'] < $this->apiResult[$fundCode]['gszzl']) {
                     $status = "\e[32m" . str_pad('↓', 10, ' ') . "\e[0m";
                 } else {
                     $status = "\e[32m" . str_pad(' ', 10, ' ') . "\e[0m";
@@ -82,11 +84,12 @@ class FundProcess extends AbstractProcess {
         echo "本次执行耗时：" . ($endTime - $startTime) . '秒' . PHP_EOL;
     }
 
-    function displayItem($valuation) {
+    public function displayItem($valuation)
+    {
         $colorAscII = '';
         if ($valuation > 0) {
             $colorAscII = "[31m";
-        } else if ($valuation < 0) {
+        } elseif ($valuation < 0) {
             $colorAscII = "[32m";
         }
         return "\e" . $colorAscII . $valuation . "\e[0m";
@@ -96,7 +99,8 @@ class FundProcess extends AbstractProcess {
      * 获取13位时间戳
      * @return int
      */
-    public function getUnixTimeStamp() {
+    public function getUnixTimeStamp()
+    {
         list($var1, $var2) = explode(' ', microtime());
         return (int)sprintf("%.0f", (floatval($var1) + floatval($var2)) * 1000);
     }

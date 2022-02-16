@@ -1,16 +1,14 @@
 <?php
 
-
 namespace App\Service;
-
 
 use EasySwoole\Component\Singleton;
 use EasySwoole\EasySwoole\Config;
 use Firebase\JWT\JWT;
 use Ramsey\Uuid\Uuid;
 
-class JwtAuth {
-
+class JwtAuth
+{
     use Singleton;
     /**
      * 加密算法
@@ -27,7 +25,8 @@ class JwtAuth {
      */
     private $_exp;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_key = Config::getInstance()->getConf('jwt.key');
         $this->_exp = Config::getInstance()->getConf('jwt.expire');
     }
@@ -41,7 +40,8 @@ class JwtAuth {
      * @throws Exception
      * @throws \Exception
      */
-    public function encode(array $data, $expire = 0, $uuid = null) {
+    public function encode(array $data, $expire = 0, $uuid = null)
+    {
         if (is_null($uuid) && !isset($data['jti'])) {
             $data['jti'] = Uuid::uuid1()->toString();
         }
@@ -56,7 +56,8 @@ class JwtAuth {
      * @param $jwt
      * @return array
      */
-    public function decode($jwt) {
+    public function decode($jwt)
+    {
         return (array)JWT::decode($jwt, $this->_key, [$this->_singAlgorithm]);
     }
 }

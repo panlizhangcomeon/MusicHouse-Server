@@ -10,8 +10,8 @@ use EasySwoole\Component\TableManager;
 use EasySwoole\Redis\Redis as RedisClient;
 use EasySwoole\RedisPool\Redis;
 
-class RoomModel extends BaseModel {
-
+class RoomModel extends BaseModel
+{
     private $roomMusicTable = 'room_music';
     private $roomTable = 'room';
     private $roomComment = 'comment';
@@ -23,7 +23,8 @@ class RoomModel extends BaseModel {
      * @param $username
      * @return array
      */
-    public function addRoom($roomTitle, $roomDesc, $username) {
+    public function addRoom($roomTitle, $roomDesc, $username)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '添加成功', 'room_list' => []];
         $time = time();
         $params = [
@@ -46,7 +47,8 @@ class RoomModel extends BaseModel {
      * @param $roomid
      * @return array
      */
-    public function delRoom($roomid) {
+    public function delRoom($roomid)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '删除成功', 'room_list' => []];
         $res = $this->raw("delete from $this->roomTable where id = ?", [$roomid]);
         if (!$res) {
@@ -67,7 +69,8 @@ class RoomModel extends BaseModel {
      * 获取房间列表
      * @return array
      */
-    public function getRoomList() {
+    public function getRoomList()
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '查询成功', 'room_list' => []];
         $roomList = $this->getAll($this->roomTable);
         $returnResult['room_list'] = $roomList;
@@ -81,7 +84,8 @@ class RoomModel extends BaseModel {
      * @param int $fd
      * @return mixed|null
      */
-    public function joinRoom(int $roomId, string $username, int $fd) {
+    public function joinRoom(int $roomId, string $username, int $fd)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '加入成功', 'roomid' => $roomId];
         $res = Redis::invoke('music', function (RedisClient $client) use ($roomId, $username) {
             $key = 'ROOMUSER:' . $roomId;
@@ -115,7 +119,8 @@ class RoomModel extends BaseModel {
      * @param int $fd
      * @return array
      */
-    public function quitRoom(int $roomId, string $username, int $fd = 0) {
+    public function quitRoom(int $roomId, string $username, int $fd = 0)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '退出房间成功', 'roomid' => $roomId];
         $res = Redis::invoke('music', function (RedisClient $client) use ($roomId, $username) {
             $key = 'ROOMUSER:' . $roomId;
@@ -139,11 +144,13 @@ class RoomModel extends BaseModel {
      * @param $roomId
      * @return array
      */
-    public function getRoomUserList($roomId) {
+    public function getRoomUserList($roomId)
+    {
         $result = ['status' => 0, 'errorMsg' => '', 'userlist' => []];
         $data = [];
         $userList = Redis::invoke('music', function (RedisClient $client) use ($roomId) {
-            $key = 'ROOMUSER:' . $roomId;;
+            $key = 'ROOMUSER:' . $roomId;
+            ;
             return $this->scanSortedSet($client, $key);
         });
         $userModel = new UserModel();
@@ -161,7 +168,8 @@ class RoomModel extends BaseModel {
         return $result;
     }
 
-    private function scanSortedSet(RedisClient $client, $key) {
+    private function scanSortedSet(RedisClient $client, $key)
+    {
         $members = [];
         $iterator = null;
         do {
@@ -176,7 +184,8 @@ class RoomModel extends BaseModel {
      * @param $roomId
      * @return array
      */
-    public function getRoomMusicList($roomId) {
+    public function getRoomMusicList($roomId)
+    {
         $result = ['status' => 0, 'errorMsg' => '', 'data' => []];
         $data = $this->raw("select * from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
         if (!empty($data)) {
@@ -192,7 +201,8 @@ class RoomModel extends BaseModel {
      * @param $type
      * @return array
      */
-    public function getNextMusic($roomId, $playingHash, $type) {
+    public function getNextMusic($roomId, $playingHash, $type)
+    {
         $result = ['status' => 0, 'errorMsg' => '', 'src' => ''];
         $data = $this->raw("select hash,album_id from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
         if (!empty($data)) {
@@ -204,7 +214,7 @@ class RoomModel extends BaseModel {
                     if ($type == DisConstant::PLAY_RAND) {
                         //随机播放
                         unset($musicHashArr[$k]);
-                    } else if ($type === DisConstant::PLAY_LOOP) {
+                    } elseif ($type === DisConstant::PLAY_LOOP) {
                         //列表循环播放
                         if ($k == count($musicHashArr) - 1) {
                             $flag = 0;
@@ -259,7 +269,8 @@ class RoomModel extends BaseModel {
      * @param $type
      * @return array
      */
-    public function getPrevMusic($roomId, $playingHash, $type) {
+    public function getPrevMusic($roomId, $playingHash, $type)
+    {
         $result = ['status' => 0, 'errorMsg' => '', 'src' => ''];
         $data = $this->raw("select hash,album_id from $this->roomMusicTable where roomid = ? order by id desc", [$roomId]);
         if (!empty($data)) {
@@ -271,7 +282,7 @@ class RoomModel extends BaseModel {
                     if ($type == DisConstant::PLAY_RAND) {
                         //随机播放
                         unset($musicHashArr[$k]);
-                    } else if ($type == DisConstant::PLAY_LOOP) {
+                    } elseif ($type == DisConstant::PLAY_LOOP) {
                         //列表循环播放
                         if ($k == 0) {
                             $flag = count($musicHashArr) - 1;
@@ -313,7 +324,8 @@ class RoomModel extends BaseModel {
      * @param int $albumId
      * @return array
      */
-    public function addRoomMusicList($roomId, $songName, $singerName, $album, $hash, $username, int $albumId) {
+    public function addRoomMusicList($roomId, $songName, $singerName, $album, $hash, $username, int $albumId)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '插入成功'];
         $time = time();
         $params = [
@@ -349,7 +361,8 @@ class RoomModel extends BaseModel {
      * @param $songname
      * @return array
      */
-    public function deleteRoomMusicList($roomId, $hash, $username, $songname) {
+    public function deleteRoomMusicList($roomId, $hash, $username, $songname)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '删除成功'];
         $result = $this->raw("delete from $this->roomMusicTable where roomid = ? and hash = ?", [$roomId, $hash]);
         if (!$result) {
@@ -371,7 +384,8 @@ class RoomModel extends BaseModel {
      * @param $roomId
      * @return array
      */
-    public function getRoomComment($roomId) {
+    public function getRoomComment($roomId)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '查询成功'];
         $userModel = new UserModel();
         $data = $this->raw("select * from $this->roomComment where roomid = ?", [$roomId]);
@@ -393,7 +407,8 @@ class RoomModel extends BaseModel {
      * @param $roomId
      * @return array
      */
-    public function delComment($commentId, $username, $roomId) {
+    public function delComment($commentId, $username, $roomId)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '删除成功'];
         $res = $this->raw("delete from $this->roomComment where id = ?", [$commentId]);
         if (!$res) {
@@ -416,7 +431,8 @@ class RoomModel extends BaseModel {
      * @param $comment
      * @return array
      */
-    public function addComment($roomId, $username, $comment) {
+    public function addComment($roomId, $username, $comment)
+    {
         $returnResult = ['status' => 0, 'errorMsg' => '添加成功'];
         $time = time();
         $params = [
@@ -445,7 +461,8 @@ class RoomModel extends BaseModel {
      * @param $username
      * @return mixed|null
      */
-    public function getFdByUsername($username) {
+    public function getFdByUsername($username)
+    {
         return Redis::invoke('music', function (RedisClient $client) use ($username) {
             $fdKey = 'USER:' . $username;
             return $client->get($fdKey);
@@ -457,9 +474,11 @@ class RoomModel extends BaseModel {
      * @param $roomId
      * @return mixed|null
      */
-    public function getRoomUser($roomId) {
+    public function getRoomUser($roomId)
+    {
         $userList = Redis::invoke('music', function (RedisClient $client) use ($roomId) {
-            $key = 'ROOMUSER:' . $roomId;;
+            $key = 'ROOMUSER:' . $roomId;
+            ;
             return $this->scanSortedSet($client, $key);
         });
         return array_keys($userList);

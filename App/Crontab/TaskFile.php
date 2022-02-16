@@ -8,8 +8,8 @@ use App\Model\UserModel;
 use EasySwoole\Utility\File;
 use EasySwoole\EasySwoole\Config;
 
-class TaskFile extends AbstractCronTask {
-
+class TaskFile extends AbstractCronTask
+{
     private $userTable = 'user';
 
     public static function getRule(): string
@@ -24,7 +24,7 @@ class TaskFile extends AbstractCronTask {
         return 'taskFile';
     }
 
-    function run(int $taskId, int $workerIndex)
+    public function run(int $taskId, int $workerIndex)
     {
         // TODO: Implement run() method.
         $userModel = new UserModel();
@@ -49,7 +49,7 @@ class TaskFile extends AbstractCronTask {
         }
     }
 
-    function onException(\Throwable $throwable, int $taskId, int $workerIndex)
+    public function onException(\Throwable $throwable, int $taskId, int $workerIndex)
     {
         // TODO: Implement onException() method.
         Logger::getInstance()->log('crontab任务异常[' . $throwable->getMessage() . ']', Logger::LOG_LEVEL_ERROR, 'Crontab');

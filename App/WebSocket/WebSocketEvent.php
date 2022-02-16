@@ -1,4 +1,5 @@
 <?php
+
 namespace App\WebSocket;
 
 use App\Model\RoomModel;
@@ -139,6 +140,5 @@ class WebSocketEvent
 
     public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request)
     {
-
     }
 }

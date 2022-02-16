@@ -1,4 +1,5 @@
 <?php
+
 namespace App\HttpController;
 
 use App\Model\RoomModel;
@@ -6,9 +7,10 @@ use App\Model\UserModel;
 use EasySwoole\EasySwoole\Config;
 use Ramsey\Uuid\Uuid;
 
-class User extends BaseController {
-
-    public function onRequest(?string $action): ?bool {
+class User extends BaseController
+{
+    public function onRequest(?string $action): ?bool
+    {
         if (!parent::onRequest($action)) {
             return false;
         }
@@ -18,7 +20,8 @@ class User extends BaseController {
     /**
      * 登陆
      */
-    public function login() {
+    public function login()
+    {
         $userModel = new UserModel();
         $username = $this->input('username', '');
         $password = $this->input('password', '');
@@ -29,7 +32,8 @@ class User extends BaseController {
     /**
      * 注册
      */
-    public function register() {
+    public function register()
+    {
         $userModel = new UserModel();
         $username = $this->input('username', '');
         $password = $this->input('password', '');
@@ -46,7 +50,8 @@ class User extends BaseController {
     /**
      * 获取用户信息(根据token)
      */
-    public function getUserInfo() {
+    public function getUserInfo()
+    {
         $userModel = new UserModel();
         $token = $this->input('token', '');
         $userInfo = $userModel->getUserInfo($token);
@@ -56,7 +61,8 @@ class User extends BaseController {
     /**
      * 查询他人信息
      */
-    public function getOtherInfo() {
+    public function getOtherInfo()
+    {
         $userModel = new UserModel();
         $username = $this->input('username', '');
         $userInfo = $userModel->getUserInfoByUsername($username);
@@ -66,7 +72,8 @@ class User extends BaseController {
     /**
      * 修改用户信息
      */
-    public function changeUserInfo() {
+    public function changeUserInfo()
+    {
         $userModel = new UserModel();
         $username = $this->input('username', '');
         $avatar = $this->input('avatar', '');
@@ -78,7 +85,8 @@ class User extends BaseController {
     /**
      * 修改密码
      */
-    public function changePassWd() {
+    public function changePassWd()
+    {
         $userModel = new UserModel();
         $username = $this->input('username', '');
         $oldPassword = $this->input('oldpassword', '');
@@ -90,7 +98,8 @@ class User extends BaseController {
     /**
      * 上传用户头像
      */
-    public function uploadAvatar() {
+    public function uploadAvatar()
+    {
         $request = $this->request();
         $uuid = Uuid::uuid1()->toString();
         $imgFileObj = $request->getUploadedFile('avatar');
@@ -104,7 +113,8 @@ class User extends BaseController {
     /**
      * 获取服务器图片
      */
-    public function img() {
+    public function img()
+    {
         $path = $this->input('imgPath', '');
         if (empty($path)) {
             return false;
@@ -118,7 +128,8 @@ class User extends BaseController {
     /**
      * 退出登陆
      */
-    public function logout() {
+    public function logout()
+    {
         $roomId = $this->input('roomid');
         $username = $this->input('username', '');
         $roomModel = new RoomModel();

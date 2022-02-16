@@ -1,4 +1,5 @@
 <?php
+
 namespace App\WebSocket\Controller;
 
 use App\Model\RoomModel;
@@ -9,8 +10,8 @@ use EasySwoole\EasySwoole\Logger;
 use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\Socket\AbstractInterface\Controller;
 
-class BaseController extends Controller {
-
+class BaseController extends Controller
+{
     private $arguments = [];
 
     private $loginInfo = [];
@@ -21,7 +22,8 @@ class BaseController extends Controller {
      * 获取客户端文件描述符
      * @return mixed
      */
-    public function getClientFd() {
+    public function getClientFd()
+    {
         return $this->caller()->getClient()->getFd();
     }
 
@@ -30,7 +32,8 @@ class BaseController extends Controller {
      * @param string|null $actionName
      * @return bool
      */
-    protected function onRequest(?string $actionName): bool {
+    protected function onRequest(?string $actionName): bool
+    {
         if (!parent::onRequest($actionName)) {
             return false;
         }
@@ -42,7 +45,8 @@ class BaseController extends Controller {
      * 登陆预处理
      * @return bool
      */
-    protected function preHandleLogin() {
+    protected function preHandleLogin()
+    {
         $fd = $this->getClientFd();
         list($loginInfo, $newToken) = $this->checkLogin();
         if (!$loginInfo) {
@@ -70,7 +74,8 @@ class BaseController extends Controller {
      * 判断登陆状态
      * @return array|bool
      */
-    private function checkLogin() {
+    private function checkLogin()
+    {
         $token = $this->getArgument('token', '');
         try {
             $loginInfo = JwtAuth::getInstance()->decode($token);
@@ -93,7 +98,8 @@ class BaseController extends Controller {
      * @param null $default
      * @return mixed|null
      */
-    public function getArgument($name, $default = null) {
+    public function getArgument($name, $default = null)
+    {
         return $this->arguments[$name] ?? $default;
     }
 
@@ -102,7 +108,8 @@ class BaseController extends Controller {
      * @param string|null $field
      * @return array|mixed|null
      */
-    public function getLoginInfo(string $field = null) {
+    public function getLoginInfo(string $field = null)
+    {
         if (is_null($field)) {
             return $this->loginInfo;
         }

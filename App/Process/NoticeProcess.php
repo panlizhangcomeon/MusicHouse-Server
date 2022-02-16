@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Process;
 
 use App\Model\RoomModel;
@@ -6,8 +7,8 @@ use App\Service\PubSub;
 use EasySwoole\Component\Process\AbstractProcess;
 use EasySwoole\EasySwoole\ServerManager;
 
-class NoticeProcess extends AbstractProcess {
-
+class NoticeProcess extends AbstractProcess
+{
     private $roomModel;
 
     public function __construct(...$args)
@@ -16,7 +17,8 @@ class NoticeProcess extends AbstractProcess {
         $this->roomModel = new RoomModel();
     }
 
-    protected function run($arg) {
+    protected function run($arg)
+    {
         // TODO: Implement run() method.
         go(function () {
             PubSub::getInstance()->subscribe('room', function ($channelName, $data, $connection) {
@@ -46,7 +48,8 @@ class NoticeProcess extends AbstractProcess {
      * 通知房间内多个客户端
      * @param $data
      */
-    public function notifyClient($data) {
+    public function notifyClient($data)
+    {
         $roomId = $data['roomid'] ?? 0;
         $roomUsers = $this->roomModel->getRoomUser($roomId);
         foreach ($roomUsers as $username) {
@@ -62,7 +65,8 @@ class NoticeProcess extends AbstractProcess {
      * 通知单一客户端
      * @param $data
      */
-    public function notifyFd($data) {
+    public function notifyFd($data)
+    {
         $fd = $data['fd'] ?? 0;
         $server = ServerManager::getInstance()->getSwooleServer();
         if ($server->isEstablished($fd)) {

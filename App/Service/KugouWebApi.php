@@ -8,15 +8,16 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use Psr\Http\Message\ResponseInterface;
 
-class KugouWebApi {
-
+class KugouWebApi
+{
     use Singleton;
 
     private $host;
 
     private $timeout;
 
-    public function __construct() {
+    public function __construct()
+    {
         $options = Config::getInstance()->getConf('kugouWeb');
         $this->host = $options['host'];
         $this->timeout = $options['timeout'];
@@ -29,7 +30,8 @@ class KugouWebApi {
      * @param string $r
      * @return array
      */
-    public function getMusic(string $hash, int $albumId, string $r = 'play/getdata') {
+    public function getMusic(string $hash, int $albumId, string $r = 'play/getdata')
+    {
         $result = ['status' => -1, 'errorMsg' => '获取失败'];
         $getParams = [
             'r' => $r,
@@ -56,7 +58,8 @@ class KugouWebApi {
      * @param string $lyrics
      * @return array
      */
-    private function getLyricsArr(string $lyrics) {
+    private function getLyricsArr(string $lyrics)
+    {
         $arr = explode("\r\n", $lyrics);
         $data = [];
         foreach ($arr as $item) {
@@ -89,7 +92,8 @@ class KugouWebApi {
      * @param array $headerParams
      * @return array|mixed|ResponseInterface|string
      */
-    public function request($path, $method = 'GET', $getParams = [], $postParams = [], $headerParams = []) {
+    public function request($path, $method = 'GET', $getParams = [], $postParams = [], $headerParams = [])
+    {
         $content = [];
         $requestUrl = $path . '?' . http_build_query($getParams);
         try {

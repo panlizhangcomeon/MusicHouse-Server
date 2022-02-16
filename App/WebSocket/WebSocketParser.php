@@ -1,4 +1,5 @@
 <?php
+
 namespace App\WebSocket;
 
 use App\WebSocket\Controller\Index;
@@ -25,9 +26,9 @@ class WebSocketParser implements ParserInterface
      * @param  WebSocket      $client WebSocket Client 对象
      * @return Caller         Socket  调用对象
      */
-    public function decode($raw, $client) : ? Caller
+    public function decode($raw, $client): ?Caller
     {
-        $caller = new Caller;
+        $caller = new Caller();
         if ($raw !== 'PING') {
             $payload = json_decode($raw, true);
             $class = isset($payload['controller']) ? $payload['controller'] : 'index';
@@ -53,7 +54,7 @@ class WebSocketParser implements ParserInterface
      * @param  WebSocket    $client   WebSocket Client 对象
      * @return string             发送给客户端的消息
      */
-    public function encode(Response $response, $client) : ? string
+    public function encode(Response $response, $client): ?string
     {
         /**
          * 这里返回响应给客户端的信息

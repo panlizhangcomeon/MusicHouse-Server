@@ -7,15 +7,16 @@ use EasySwoole\EasySwoole\Config;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 
-class KugouMobileApi {
-
+class KugouMobileApi
+{
     use Singleton;
 
     private $host;
 
     private $timeout;
 
-    public function __construct() {
+    public function __construct()
+    {
         $options = Config::getInstance()->getConf('kugouMobile');
         $this->host = $options['host'];
         $this->timeout = $options['timeout'];
@@ -30,7 +31,8 @@ class KugouMobileApi {
      * @param int $showType
      * @return array
      */
-    public function searchMusic($keyword, $page = 0, $pageSize = 50, $format = 'json', $showType = 1) {
+    public function searchMusic($keyword, $page = 0, $pageSize = 50, $format = 'json', $showType = 1)
+    {
         $result = [];
         $getParams = [
             'keyword' => $keyword,
@@ -67,7 +69,8 @@ class KugouMobileApi {
      * @param array $postParams
      * @return array|mixed|ResponseInterface|string
      */
-    public function request($path, $method = 'GET', $getParams = [], $postParams = []) {
+    public function request($path, $method = 'GET', $getParams = [], $postParams = [])
+    {
         $content = [];
         $requestUrl = $path . '?' . http_build_query($getParams);
         try {

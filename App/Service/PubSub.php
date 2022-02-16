@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Service;
 
 use EasySwoole\Component\Singleton;
 use EasySwoole\RedisPool\Redis;
 use EasySwoole\Redis\Redis as Connection;
 
-class PubSub {
-
+class PubSub
+{
     use Singleton;
 
     /**
@@ -15,7 +16,8 @@ class PubSub {
      * @param array $data
      * @return mixed|null
      */
-    public function publish($channelName, array $data) {
+    public function publish($channelName, array $data)
+    {
         $data = json_encode($data);
         return Redis::invoke('music', function (Connection $connection) use ($channelName, $data) {
             return $connection->publish($channelName, $data);
@@ -28,7 +30,8 @@ class PubSub {
      * @param callable $callable
      * @return mixed|null
      */
-    public function subscribe($channelName, callable $callable) {
+    public function subscribe($channelName, callable $callable)
+    {
         return Redis::invoke('music', function (Connection $connection) use ($channelName, $callable) {
             $connection->subscribe(function (Connection $connection, $channel, $data) use ($callable) {
                 $data = json_decode($data, true);
@@ -42,10 +45,10 @@ class PubSub {
      * @param $channelName
      * @return mixed|null
      */
-    public function unSubscribe($channelName) {
+    public function unSubscribe($channelName)
+    {
         return Redis::invoke('music', function (Connection $connection) use ($channelName) {
             $connection->unsubscribe($channelName);
         });
     }
 }
-

@@ -5,15 +5,16 @@ namespace App\Service;
 use EasySwoole\Component\Singleton;
 use GuzzleHttp\Client;
 
-class TianTianApi {
-
+class TianTianApi
+{
     use Singleton;
 
     protected $host = 'http://fundgz.1234567.com.cn/';
 
     protected $timeout = 10;
 
-    public function request($path, $method = 'GET', $postParams = []) {
+    public function request($path, $method = 'GET', $postParams = [])
+    {
         $content = [];
         $url = $this->host . $path;
         try {

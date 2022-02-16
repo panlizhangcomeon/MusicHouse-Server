@@ -1,4 +1,5 @@
 <?php
+
 namespace EasySwoole\EasySwoole;
 
 use App\Crontab\TaskFile;
@@ -21,7 +22,6 @@ use Swoole\Table;
 
 class EasySwooleEvent implements Event
 {
-
     public static function initialize()
     {
         // TODO: Implement initialize() method.

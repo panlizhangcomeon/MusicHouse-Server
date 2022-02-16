@@ -1,4 +1,5 @@
 <?php
+
 namespace App\WebSocket\Controller;
 
 use App\Model\RoomModel;
@@ -6,20 +7,22 @@ use App\Model\UserModel;
 use App\Service\DisConstant;
 use App\Service\Log;
 
-class RoomController extends BaseController {
-
+class RoomController extends BaseController
+{
     private $roomModel;
 
     private $userModel;
 
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->roomModel = new RoomModel();
         $this->userModel = new UserModel();
     }
 
-    public function onRequest(?string $actionName): bool {
+    public function onRequest(?string $actionName): bool
+    {
         if (!parent::onRequest($actionName)) {
             return false;
         }
@@ -35,7 +38,8 @@ class RoomController extends BaseController {
     /**
      * 获取房间列表
      */
-    public function getRoomList() {
+    public function getRoomList()
+    {
         $username = $this->getLoginInfo('username');
         $result = $this->roomModel->getRoomList($username);
         $result['action'] = 'getRoomList';
@@ -45,7 +49,8 @@ class RoomController extends BaseController {
     /**
      * 添加房间
      */
-    public function addRoom() {
+    public function addRoom()
+    {
         $roomTitle = $this->getArgument('roomtitle', '');
         $roomDesc = $this->getArgument('roomdesc', '');
         $username = $this->getLoginInfo('username');
@@ -57,7 +62,8 @@ class RoomController extends BaseController {
     /**
      * 刪除房间
      */
-    public function delRoom() {
+    public function delRoom()
+    {
         $roomid = $this->getArgument('roomid', 0);
         $result = $this->roomModel->delRoom($roomid);
         $result['action'] = 'delRoom';
@@ -67,7 +73,8 @@ class RoomController extends BaseController {
     /**
      * 加入房间
      */
-    public function joinRoom() {
+    public function joinRoom()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $username = $this->getLoginInfo('username');
         $fd = $this->getClientFd();
@@ -79,7 +86,8 @@ class RoomController extends BaseController {
     /**
      * 退出房间
      */
-    public function quitRoom() {
+    public function quitRoom()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $username = $this->getLoginInfo('username');
         $fd = $this->getClientFd();
@@ -91,7 +99,8 @@ class RoomController extends BaseController {
     /**
      * 获取房间在线用户
      */
-    public function getRoomUserList() {
+    public function getRoomUserList()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $result = $this->roomModel->getRoomUserList($roomId);
         $result['action'] = 'getRoomUserList';
@@ -101,7 +110,8 @@ class RoomController extends BaseController {
     /**
      * 获取房间下的音乐列表
      */
-    public function getRoomMusicList() {
+    public function getRoomMusicList()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $result = $this->roomModel->getRoomMusicList($roomId);
         $result['action'] = 'getRoomMusicList';
@@ -127,7 +137,8 @@ class RoomController extends BaseController {
     /**
      * 获取下一首(随机/循环)
      */
-    public function getNextMusic() {
+    public function getNextMusic()
+    {
         $type = $this->getArgument('type', DisConstant::PLAY_RAND);
         $roomId = $this->getArgument('roomid', 0);
         $playingHash = $this->getArgument('hash', '');
@@ -139,7 +150,8 @@ class RoomController extends BaseController {
     /**
      * 获取上一首(随机/循环)
      */
-    public function getPrevMusic() {
+    public function getPrevMusic()
+    {
         $type = $this->getArgument('type', DisConstant::PLAY_RAND);
         $roomId = $this->getArgument('roomid', 0);
         $playingHash = $this->getArgument('hash', '');
@@ -151,7 +163,8 @@ class RoomController extends BaseController {
     /**
      * 添加到播放列表
      */
-    public function addRoomMusicList() {
+    public function addRoomMusicList()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $username = $this->getLoginInfo('username');
         $songName = $this->getArgument('songname', '');
@@ -167,7 +180,8 @@ class RoomController extends BaseController {
     /**
      * 从播放列表删除
      */
-    public function deleteRoomMusicList() {
+    public function deleteRoomMusicList()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $hash = $this->getArgument('hash', '');
         $songname = $this->getArgument('songname', '');
@@ -180,7 +194,8 @@ class RoomController extends BaseController {
     /**
      * 获取房间下的评论列表
      */
-    public function getRoomComment() {
+    public function getRoomComment()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $result = $this->roomModel->getRoomComment($roomId);
         $result['action'] = 'getRoomComment';
@@ -190,7 +205,8 @@ class RoomController extends BaseController {
     /**
      * 删除评论
      */
-    public function delComment() {
+    public function delComment()
+    {
         $commentId = $this->getArgument('id', 0);
         $roomId = $this->getArgument('roomid', 0);
         $username = $this->getLoginInfo('username');
@@ -202,7 +218,8 @@ class RoomController extends BaseController {
     /**
      * 添加评论
      */
-    public function addComment() {
+    public function addComment()
+    {
         $roomId = $this->getArgument('roomid', 0);
         $username = $this->getLoginInfo('username');
         $comment = $this->getArgument('comment', '');
